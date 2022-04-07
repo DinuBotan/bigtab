@@ -3,15 +3,7 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - master
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-  workflow_dispatch:
+
 jobs:
   continuous-integration:
     name: CI
@@ -37,5 +29,5 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Run Unit Tests
-        run: npm run test:unit:ci
+      # - name: Run Unit Tests
+      #   run: npm run test:unit:ci

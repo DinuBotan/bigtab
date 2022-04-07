@@ -12,6 +12,8 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.18.0
   '@typescript-eslint/parser': ^5.18.0
   '@vitejs/plugin-react': ^1.3.0
+  '@xstate/immer': ^0.3.1
+  '@xstate/react': ^2.0.1
   commitizen: ^4.2.4
   cross-env: ^7.0.3
   dotenv: ^16.0.0
@@ -26,6 +28,7 @@ specifiers:
   eslint-plugin-react: ^7.29.4
   eslint-plugin-react-hooks: ^4.4.0
   husky: ^7.0.4
+  immer: ^9.0.12
   jest: ^27.5.1
   lint-staged: ^12.3.7
   prettier: ^2.6.2
@@ -37,10 +40,15 @@ specifiers:
   ts-jest: ^27.1.4
   typescript: ^4.6.3
   vite: ^2.9.1
+  xstate: ^4.30.6
 
 dependencies:
+  '@xstate/immer': 0.3.1_immer@9.0.12+xstate@4.30.6
+  '@xstate/react': 2.0.1_20efcb6402c15d98b25e718ed3a2dc0b
+  immer: 9.0.12
   react: 18.0.0
   react-dom: 18.0.0_react@18.0.0
+  xstate: 4.30.6
 
 devDependencies:
   '@commitlint/cli': 16.2.3
@@ -1274,6 +1282,36 @@ packages:
   /@webcomponents/custom-elements/1.5.0:
     resolution: {integrity: sha512-c+7jPQCs9h/BYVcZ2Kna/3tsl3A/9EyXfvWjp5RiTDm1OpTcbZaCa1z4RNcTe/hUtXaqn64JjNW1yrWT+rZ8gg==}
     dev: true
+
+  /@xstate/immer/0.3.1_immer@9.0.12+xstate@4.30.6:
+    resolution: {integrity: sha512-YE+KY08IjEEmXo6XKKpeSGW4j9LfcXw+5JVixLLUO3fWQ3M95joWJ40VtGzx0w0zQSzoCNk8NgfvwWBGSbIaTA==}
+    peerDependencies:
+      immer: ^9.0.6
+      xstate: ^4.29.0
+    dependencies:
+      immer: 9.0.12
+      xstate: 4.30.6
+    dev: false
+
+  /@xstate/react/2.0.1_20efcb6402c15d98b25e718ed3a2dc0b:
+    resolution: {integrity: sha512-sT3hxyzNBw+bm7uT3BP+uXzN0MnRqiaj/U9Yl4OYaMAUJXWsRvSA/ipL7EDf0gVLRGrRhJTCsC0cjWaduAAqnw==}
+    peerDependencies:
+      '@xstate/fsm': ^1.6.5
+      react: ^16.8.0 || ^17.0.0
+      xstate: ^4.30.3
+    peerDependenciesMeta:
+      '@xstate/fsm':
+        optional: true
+      xstate:
+        optional: true
+    dependencies:
+      react: 18.0.0
+      use-isomorphic-layout-effect: 1.1.2_00a11a054056e3746b551a83b9229751
+      use-subscription: 1.6.0_react@18.0.0
+      xstate: 4.30.6
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
 
   /JSONStream/1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}
@@ -3407,6 +3445,10 @@ packages:
     resolution: {integrity: sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==}
     engines: {node: '>= 4'}
     dev: true
+
+  /immer/9.0.12:
+    resolution: {integrity: sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA==}
+    dev: false
 
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -5944,6 +5986,27 @@ packages:
       punycode: 2.1.1
     dev: true
 
+  /use-isomorphic-layout-effect/1.1.2_00a11a054056e3746b551a83b9229751:
+    resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+    dependencies:
+      '@types/react': 17.0.43
+      react: 18.0.0
+    dev: false
+
+  /use-subscription/1.6.0_react@18.0.0:
+    resolution: {integrity: sha512-0Y/cTLlZfw547tJhJMoRA16OUbVqRm6DmvGpiGbmLST6BIA5KU5cKlvlz8DVMrACnWpyEjCkgmhLatthP4jUbA==}
+    peerDependencies:
+      react: ^18.0.0
+    dependencies:
+      react: 18.0.0
+    dev: false
+
   /util-deprecate/1.0.2:
     resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
     dev: true
@@ -6149,6 +6212,10 @@ packages:
   /xmlchars/2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
     dev: true
+
+  /xstate/4.30.6:
+    resolution: {integrity: sha512-V7liK1cjkZRh6R/MSneG8S5VLGRatpOUcnNieiYJX4LbwKi9eUVUH5V04ugJYVcJ+2oKDKvEFvzk0VnSC7lTag==}
+    dev: false
 
   /y18n/5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
