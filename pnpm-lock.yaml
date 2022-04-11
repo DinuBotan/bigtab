@@ -18,7 +18,7 @@ specifiers:
   cross-env: ^7.0.3
   dotenv: ^16.0.0
   eslint: ^8.12.0
-  eslint-config-airbnb-base: ^15.0.0
+  eslint-config-airbnb: ^19.0.4
   eslint-config-airbnb-typescript: ^17.0.0
   eslint-config-prettier: ^8.5.0
   eslint-formatter-mo: ^1.1.1
@@ -66,7 +66,7 @@ devDependencies:
   cross-env: 7.0.3
   dotenv: 16.0.0
   eslint: 8.12.0
-  eslint-config-airbnb-base: 15.0.0_6727bad621c6c338589cdfead936b843
+  eslint-config-airbnb: 19.0.4_7ff9fbf54c79caee2723c062ec735a90
   eslint-config-airbnb-typescript: 17.0.0_72d4756238c288e6c9b5886d039be106
   eslint-config-prettier: 8.5.0_eslint@8.12.0
   eslint-formatter-mo: 1.1.1
@@ -2647,6 +2647,26 @@ packages:
       eslint: 8.12.0
       eslint-config-airbnb-base: 15.0.0_6727bad621c6c338589cdfead936b843
       eslint-plugin-import: 2.26.0_eslint@8.12.0
+    dev: true
+
+  /eslint-config-airbnb/19.0.4_7ff9fbf54c79caee2723c062ec735a90:
+    resolution: {integrity: sha512-T75QYQVQX57jiNgpF9r1KegMICE94VYwoFQyMGhrvc+lB8YF2E/M/PYDaQe1AJcWaEgqLE+ErXV1Og/+6Vyzew==}
+    engines: {node: ^10.12.0 || ^12.22.0 || ^14.17.0 || >=16.0.0}
+    peerDependencies:
+      eslint: ^7.32.0 || ^8.2.0
+      eslint-plugin-import: ^2.25.3
+      eslint-plugin-jsx-a11y: ^6.5.1
+      eslint-plugin-react: ^7.28.0
+      eslint-plugin-react-hooks: ^4.3.0
+    dependencies:
+      eslint: 8.12.0
+      eslint-config-airbnb-base: 15.0.0_6727bad621c6c338589cdfead936b843
+      eslint-plugin-import: 2.26.0_eslint@8.12.0
+      eslint-plugin-jsx-a11y: 6.5.1_eslint@8.12.0
+      eslint-plugin-react: 7.29.4_eslint@8.12.0
+      eslint-plugin-react-hooks: 4.4.0_eslint@8.12.0
+      object.assign: 4.1.2
+      object.entries: 1.1.5
     dev: true
 
   /eslint-config-prettier/8.5.0_eslint@8.12.0:
