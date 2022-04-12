@@ -4,9 +4,12 @@ specifiers:
   '@commitlint/cli': ^16.2.3
   '@commitlint/config-conventional': ^16.2.1
   '@commitlint/types': ^16.2.1
+  '@extend-chrome/menus': ^0.0.3
+  '@extend-chrome/storage': ^1.5.0
   '@types/chrome': ^0.0.180
   '@types/firefox-webext-browser': ^94.0.1
   '@types/jest': ^27.4.1
+  '@types/lodash': ^4.14.181
   '@types/react': ^17.0.43
   '@types/react-dom': ^17.0.14
   '@typescript-eslint/eslint-plugin': ^5.18.0
@@ -31,6 +34,7 @@ specifiers:
   immer: ^9.0.12
   jest: ^27.5.1
   lint-staged: ^12.3.7
+  lodash: ^4.17.21
   prettier: ^2.6.2
   pretty-quick: ^3.1.3
   puppeteer: ^13.5.2
@@ -43,9 +47,12 @@ specifiers:
   xstate: ^4.30.6
 
 dependencies:
+  '@extend-chrome/menus': 0.0.3
+  '@extend-chrome/storage': 1.5.0
   '@xstate/immer': 0.3.1_immer@9.0.12+xstate@4.30.6
   '@xstate/react': 2.0.1_20efcb6402c15d98b25e718ed3a2dc0b
   immer: 9.0.12
+  lodash: 4.17.21
   react: 18.0.0
   react-dom: 18.0.0_react@18.0.0
   xstate: 4.30.6
@@ -57,6 +64,7 @@ devDependencies:
   '@types/chrome': 0.0.180
   '@types/firefox-webext-browser': 94.0.1
   '@types/jest': 27.4.1
+  '@types/lodash': 4.14.181
   '@types/react': 17.0.43
   '@types/react-dom': 17.0.14
   '@typescript-eslint/eslint-plugin': 5.18.0_a07dca3bdfc4bfa60f4dda0c1f9e3287
@@ -673,6 +681,37 @@ packages:
       - supports-color
     dev: true
 
+  /@extend-chrome/events-rxjs/0.12.1_rxjs@6.6.7:
+    resolution: {integrity: sha512-Z3VrzaODolVpXmXw7oo5QLygv3JH1dccXYYUgJbsipTMIWWPB38fytSMj0jFVsj203K/+UDjvaXJT9raO4Y9Pg==}
+    peerDependencies:
+      rxjs: ^6.5.4
+    dependencies:
+      rxjs: 6.6.7
+    dev: false
+
+  /@extend-chrome/menus/0.0.3:
+    resolution: {integrity: sha512-aMoosLUpwBW/pk4Z1Y9JcJ0J/pfAxeEKUQipHiXePIg7ZtkuTiVVP/ZjLCjZxNEr+nsSNlAOXZONHnKLcStAfw==}
+    dependencies:
+      '@extend-chrome/events-rxjs': 0.12.1_rxjs@6.6.7
+      '@extend-chrome/messages': 1.2.2
+      rxjs: 6.6.7
+    dev: false
+
+  /@extend-chrome/messages/1.2.2:
+    resolution: {integrity: sha512-1VyUCT+1jewkm7cVBE5fMrrazxuL5QrmCOg2azmItBpiTqwmV/XxhGDQAtfsT4i24xB4gwL0s7+6PpEPec+1mw==}
+    dependencies:
+      '@types/chrome': 0.0.99
+      '@types/node': 13.13.52
+      rxjs: 7.5.4
+    dev: false
+
+  /@extend-chrome/storage/1.5.0:
+    resolution: {integrity: sha512-JhoBZ1xIzu0/mauNR/MadUsfNsWP1lTmWR8RlVJvWStUifzNZdAxI2i8NFCkd4RfjyTn4FcDETik3SDlAfGQRA==}
+    dependencies:
+      chrome-promise: 3.0.5
+      rxjs: 7.5.4
+    dev: false
+
   /@humanwhocodes/config-array/0.9.3:
     resolution: {integrity: sha512-3xSMlXHh03hCcCmFc0rbKp3Ivt2PFEJnQUJDDMTJQ2wkECZWdq4GePs2ctc5H8zV+cHPaq8k2vU8mrQjA6iHdQ==}
     engines: {node: '>=10.10.0'}
@@ -1009,15 +1048,19 @@ packages:
       '@types/har-format': 1.2.5
     dev: true
 
+  /@types/chrome/0.0.99:
+    resolution: {integrity: sha512-la87+bjtZ6XstGqUdaLT5YfECSPw9Ex9iYQUOMGlBtgqI6FLGewGZtkByX5TcPBHM6XKp6RnR50Ytd+tI2m/6Q==}
+    dependencies:
+      '@types/filesystem': 0.0.29
+    dev: false
+
   /@types/filesystem/0.0.29:
     resolution: {integrity: sha512-85/1KfRedmfPGsbK8YzeaQUyV1FQAvMPMTuWFQ5EkLd2w7szhNO96bk3Rh/SKmOfd9co2rCLf0Voy4o7ECBOvw==}
     dependencies:
       '@types/filewriter': 0.0.28
-    dev: true
 
   /@types/filewriter/0.0.28:
     resolution: {integrity: sha1-wFTor02d11205jq8dviFFocU1LM=}
-    dev: true
 
   /@types/firefox-webext-browser/94.0.1:
     resolution: {integrity: sha512-I6iHRQJSTZ+gYt2IxdH2RRAMvcUyK8v5Ig7fHQR0IwUNYP7hz9+cziBVIKxLCO6XI7fiyRsNOWObfl3/4Js2Lg==}
@@ -1064,6 +1107,10 @@ packages:
     resolution: {integrity: sha1-7ihweulOEdK4J7y+UnC86n8+ce4=}
     dev: true
 
+  /@types/lodash/4.14.181:
+    resolution: {integrity: sha512-n3tyKthHJbkiWhDZs3DkhkCzt2MexYHXlX0td5iMplyfwketaOeKboEVBqzceH7juqvEg3q5oUoBFxSLu7zFag==}
+    dev: true
+
   /@types/minimatch/3.0.5:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
     dev: true
@@ -1071,6 +1118,10 @@ packages:
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
     dev: true
+
+  /@types/node/13.13.52:
+    resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
+    dev: false
 
   /@types/node/14.14.14:
     resolution: {integrity: sha512-UHnOPWVWV1z+VV8k6L1HhG7UbGBgIdghqF3l9Ny9ApPghbjICXkUJSd/b9gOgQfjM1r+37cipdw/HJ3F6ICEnQ==}
@@ -1808,6 +1859,10 @@ packages:
   /chownr/1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
     dev: true
+
+  /chrome-promise/3.0.5:
+    resolution: {integrity: sha512-ekIevrJOO5S6ezSzl5TdaLhlQkovY5nVaNSgA2XyhuNtlGniUvTbf7rzH95alh1OajArwoP2xVGYUJbpVLmZYA==}
+    dev: false
 
   /ci-info/3.3.0:
     resolution: {integrity: sha512-riT/3vI5YpVH6/qomlDnJow6TBee2PBKSEpx3O32EGPYbWGIRsIlGRms3Sm74wYE1JMo8RnO04Hb12+v1J5ICw==}
@@ -4474,7 +4529,6 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-update/4.0.0:
     resolution: {integrity: sha512-9fkkDevMefjg0mmzWFBW8YkFP91OrizzkW3diF7CpG+S2EYdy4+TVfGwz1zeF8x7hCx1ovSPTOE9Ngib74qqUg==}
@@ -5352,13 +5406,11 @@ packages:
     engines: {npm: '>=2.0.0'}
     dependencies:
       tslib: 1.14.1
-    dev: true
 
   /rxjs/7.5.4:
     resolution: {integrity: sha512-h5M3Hk78r6wAheJF0a5YahB1yRQKCsZ4MsGdZ5O9ETbVtjPcScGfrMmoOq7EBsCRzd4BDkvDJ7ogP8Sz5tTFiQ==}
     dependencies:
       tslib: 2.3.1
-    dev: true
 
   /safe-buffer/5.1.2:
     resolution: {integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==}
@@ -5902,11 +5954,9 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}
-    dev: true
 
   /tsutils/3.21.0_typescript@4.6.3:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}

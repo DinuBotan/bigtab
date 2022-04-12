@@ -1,46 +1,52 @@
-import { interpret } from 'xstate';
-import { machine } from './machine';
+import { menus } from '@extend-chrome/menus';
+import { startMachine } from './interpreter';
+import { EVENTS } from './events';
 
-const main = async () => {
-  const backgroundMachine = interpret(machine)
-    .onChange((context, prevContext) => {
-      console.log('Old context:');
-      console.log(prevContext);
-      console.log('New context:');
-      console.log(context);
-      chrome.storage.local.set({ BigTabBackgroundContext: context });
-    })
-    .onTransition((state) => console.log(state.value))
-    .start();
-  backgroundMachine.send({ type: 'SYNC_WITH_LOCAL' });
+let BACKGROUND: Awaited<ReturnType<typeof startMachine>>;
 
-  chrome.contextMenus.create({
-    title: 'BigTab',
-    id: 'Main',
-  });
-  const rightClickMenuOptions = [
-    'Send All Tabs',
-    'Send Tabs Left',
-    'Send Tabs Right',
-    'Send Tab',
-    'Send All Tabs Except This',
-  ];
-  rightClickMenuOptions.forEach((opt) =>
-    chrome.contextMenus.create({
-      title: opt,
-      id: opt,
-      parentId: 'Main',
-    }),
-  );
-
+const setupListeners = async () => {
   chrome.action.onClicked.addListener(async () => {
     await chrome.tabs.create({ url: 'src/pages/popup/index.html' });
   });
-  chrome.contextMenus.onClicked.addListener(
-    async (info: chrome.contextMenus.OnClickData, tab?: chrome.tabs.Tab) => {
-      console.log({ type: 'RIGHT_CLICK', info, tab });
-      backgroundMachine.send({ type: 'RIGHT_CLICK', info, tab });
-    },
-  );
 };
+
+const initStateMachine = async () => {
+  BACKGROUND = await startMachine();
+  // BACKGROUND.send({ type: 'SYNC_WITH_LOCAL' });
+  // backgroundMachine.send({ type: 'RIGHT_CLICK', info, tab });
+};
+
+const setupContextMenu = async () => {
+  // Create Root
+  menus.create({
+    id: 'root',
+    title: 'BigTab',
+  });
+
+  // Add Context Menu Events
+  EVENTS.filter(({ scope }) => scope === 'contextMenu').map(({ name, id }) =>
+    menus.create({
+      id,
+      title: name,
+      parentId: 'root',
+    }),
+  );
+
+  // Observe Clicks
+  menus.clickStream.subscribe(([info, tab]) => {
+    BACKGROUND.send({ type: 'CONTEXT_MENU', info, tab });
+  });
+};
+
+const main = async () => {
+  // Setup Listeners
+  await setupListeners();
+
+  // Initialize State Machine
+  await initStateMachine();
+
+  // Create Context Menu
+  await setupContextMenu();
+};
+
 main();

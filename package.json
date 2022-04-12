@@ -27,9 +27,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@extend-chrome/menus": "^0.0.3",
+    "@extend-chrome/storage": "^1.5.0",
     "@xstate/immer": "^0.3.1",
     "@xstate/react": "^2.0.1",
     "immer": "^9.0.12",
+    "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "xstate": "^4.30.6"
@@ -41,6 +44,7 @@
     "@types/chrome": "^0.0.180",
     "@types/firefox-webext-browser": "^94.0.1",
     "@types/jest": "^27.4.1",
+    "@types/lodash": "^4.14.181",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
