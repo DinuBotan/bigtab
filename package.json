@@ -92,12 +92,24 @@
       "plugin:@typescript-eslint/recommended",
       "airbnb-base",
       "airbnb/hooks",
-      "airbnb-typescript/base"
+      "airbnb-typescript/base",
+      "prettier"
     ],
     "settings": {
       "import/resolver": {
         "typescript": {}
-      }
+      },
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": [
+            "test/browser/bootstrap.ts",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "vite.config.ts"
+          ]
+        }
+      ]
     },
     "parserOptions": {
       "ecmaFeatures": {
@@ -143,8 +155,10 @@
         "error",
         {
           "devDependencies": [
-            "**/src/**/*.ts",
-            "**/src/**/*.tsx"
+            "test/browser/bootstrap.ts",
+            "**/*.test.ts",
+            "**/*.test.tsx",
+            "vite.config.ts"
           ]
         }
       ],
