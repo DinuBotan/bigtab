@@ -2,7 +2,14 @@
   "name": "Big Tab",
   "version": "0.0.1",
   "manifest_version": 3,
-  "permissions": ["tabs", "storage", "activeTab", "scripting", "contextMenus"],
+  "permissions": [
+    "tabs",
+    "tabGroups",
+    "storage",
+    "activeTab",
+    "scripting",
+    "contextMenus"
+  ],
   "background": {
     "service_worker": "src/background/index.ts"
   },

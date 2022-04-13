@@ -1,16 +1,24 @@
 import { interpret } from 'xstate';
-import { isEqual } from 'lodash';
 import { BackgroundMachineContext } from './types';
 import { machine } from './machine';
-import { getStorage, updateStorage } from './storage';
+import { getStorage } from './storage';
+// import { setupContextMenus } from './menus';
 
 const DEFAULT_CONTEXT: BackgroundMachineContext = {
   retries: 0,
+  installedTimestamp: new Date().getTime(),
+  version: '0.0.0-beta',
   tabs: [],
+  groups: [],
   settings: {},
 };
 
-export const startMachine = async () => {
+export const startMachine = async (
+  onChangeBinding: (
+    context: BackgroundMachineContext,
+    previousContext: BackgroundMachineContext | undefined,
+  ) => Promise<void>,
+) => {
   // Get from Storage
   const savedContext = (await getStorage()) as BackgroundMachineContext;
 
@@ -18,11 +26,5 @@ export const startMachine = async () => {
     Object.keys(savedContext).length > 0 ? savedContext : DEFAULT_CONTEXT,
   );
 
-  return interpret(initializedMachine)
-    .onChange(async (context, prevContext) => {
-      if (!isEqual(prevContext, context)) {
-        await updateStorage(context);
-      }
-    })
-    .start();
+  return interpret(initializedMachine).onChange(onChangeBinding).start();
 };

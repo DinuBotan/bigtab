@@ -1,6 +1,8 @@
-import { menus } from '@extend-chrome/menus';
+import { isEqual } from 'lodash';
+import { BackgroundMachineContext } from './types';
+import { setupContextMenus } from './menus';
 import { startMachine } from './interpreter';
-import { EVENTS } from './events';
+import { updateStorage } from './storage';
 
 let BACKGROUND: Awaited<ReturnType<typeof startMachine>>;
 
@@ -10,32 +12,41 @@ const setupListeners = async () => {
   });
 };
 
-const initStateMachine = async () => {
-  BACKGROUND = await startMachine();
-  // BACKGROUND.send({ type: 'SYNC_WITH_LOCAL' });
-  // backgroundMachine.send({ type: 'RIGHT_CLICK', info, tab });
+const contextMenuBinding = (
+  info: chrome.contextMenus.OnClickData,
+  tab?: chrome.tabs.Tab,
+) => {
+  if ((info.menuItemId as string).startsWith('groups-')) {
+    const groupId = (info.menuItemId as string)
+      .replace('groups-', '')
+      .replace(/-([^-]*$)/g, '');
+    BACKGROUND.send({ type: 'CONTEXT_MENU', info, tab, toGroup: groupId });
+  } else {
+    BACKGROUND.send({ type: 'CONTEXT_MENU', info, tab });
+  }
 };
 
-const setupContextMenu = async () => {
-  // Create Root
-  menus.create({
-    id: 'root',
-    title: 'BigTab',
-  });
+const onChangeBinding = async (
+  context: BackgroundMachineContext,
+  prevContext: BackgroundMachineContext | undefined,
+) => {
+  if (!isEqual(prevContext, context)) {
+    await updateStorage(context);
+    if (!isEqual(prevContext?.groups, context.groups)) {
+      await setupContextMenus(context);
+    }
+    console.log(context);
+  }
+};
 
-  // Add Context Menu Events
-  EVENTS.filter(({ scope }) => scope === 'contextMenu').map(({ name, id }) =>
-    menus.create({
-      id,
-      title: name,
-      parentId: 'root',
-    }),
-  );
+const initStateMachine = async () => {
+  BACKGROUND = await startMachine(onChangeBinding);
+};
 
-  // Observe Clicks
-  menus.clickStream.subscribe(([info, tab]) => {
-    BACKGROUND.send({ type: 'CONTEXT_MENU', info, tab });
-  });
+export const hookContextMenus = async () => {
+  // Initialize w/ Context
+  await setupContextMenus(BACKGROUND.state.context);
+  chrome.contextMenus.onClicked.addListener(contextMenuBinding);
 };
 
 const main = async () => {
@@ -46,7 +57,7 @@ const main = async () => {
   await initStateMachine();
 
   // Create Context Menu
-  await setupContextMenu();
+  await hookContextMenus();
 };
 
 main();

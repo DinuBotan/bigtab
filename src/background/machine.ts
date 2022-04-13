@@ -7,23 +7,19 @@ import {
   BaseActionObject,
   StatesConfig,
   StateSchema,
+  AssignAction,
+  InvokeCreator,
+  EventObject,
 } from 'xstate';
 
 import { EVENTS } from './events';
 
 import {
-  LocalTab,
   BackgroundMachineContext,
   BackgroundMachineEvent,
   ContextMenuEvent,
+  ContextMenuOnCompleteData,
 } from './types';
-
-const assignTabs = assign<
-  BackgroundMachineContext,
-  DoneInvokeEvent<Array<LocalTab>>
->({
-  tabs: ({ tabs }, event) => [...tabs, ...event.data],
-});
 
 const invokeWrapper = async <T, V>(
   func: (context: BackgroundMachineContext, arg?: V) => Promise<T>,
@@ -37,13 +33,48 @@ const invokeWrapper = async <T, V>(
   return def;
 };
 
+const promiseServiceStates = <T, V extends EventObject>(
+  id: string,
+  src: InvokeCreator<BackgroundMachineContext, V>,
+  onComplete?: AssignAction<BackgroundMachineContext, DoneInvokeEvent<T>>,
+) => ({
+  initial: 'running',
+  states: {
+    running: {
+      invoke: {
+        id,
+        src,
+        onDone: {
+          target: 'done',
+          actions: onComplete,
+        },
+        onError: {
+          target: 'error',
+        },
+      },
+    },
+    error: {
+      always: [
+        {
+          target: 'running',
+          actions: assign({
+            retries: ({ retries }) => retries + 1,
+          }),
+        },
+      ],
+    },
+    done: {
+      type: 'final',
+    },
+  },
+  onDone: 'idle',
+});
+
 const CONTEXT_MENU_EVENTS = EVENTS.filter(
   ({ scope }) => scope === 'contextMenu',
 );
 
-const contextMenuTransitions: Array<
-  TransitionConfig<BackgroundMachineContext, BackgroundMachineEvent>
-> = CONTEXT_MENU_EVENTS.map(
+const contextMenuTransitions = CONTEXT_MENU_EVENTS.map(
   (event) =>
     ({
       target: event.target,
@@ -51,54 +82,28 @@ const contextMenuTransitions: Array<
         ...args: [object, object, { state: { event: ContextMenuEvent } }]
       ) => {
         const [, , meta] = args;
-        return meta.state.event.info.menuItemId === event.id;
+        return meta.state.event.info.menuItemId.endsWith(event.id);
       },
     } as TransitionConfig<BackgroundMachineContext, BackgroundMachineEvent>),
 );
 
-const contextMenuStates: StatesConfig<
-  BackgroundMachineContext,
-  StateSchema<BackgroundMachineContext>,
-  BackgroundMachineEvent,
-  BaseActionObject
-> = CONTEXT_MENU_EVENTS.reduce(
+const contextMenuStates = CONTEXT_MENU_EVENTS.reduce(
   (stateObject, event) => ({
     ...stateObject,
-    [event.target]: {
-      initial: 'running',
-      states: {
-        running: {
-          invoke: {
-            id: event.id,
-            src: (
-              context: BackgroundMachineContext,
-              invokeObject?: ContextMenuEvent,
-            ) => invokeWrapper(event.invoke, [], context, invokeObject?.tab),
-            onDone: {
-              target: 'done',
-              actions: assignTabs,
-            },
-            onError: {
-              target: 'error',
-            },
-          },
-        },
-        error: {
-          always: [
-            {
-              target: 'running',
-              actions: assign({
-                retries: ({ retries }) => retries + 1,
-              }),
-            },
-          ],
-        },
-        done: {
-          type: 'final',
-        },
-      },
-      onDone: 'idle',
-    },
+    [event.target]: promiseServiceStates<
+      ContextMenuOnCompleteData,
+      ContextMenuEvent
+    >(
+      event.id,
+      (context: BackgroundMachineContext, invokeObject?: ContextMenuEvent) =>
+        invokeWrapper(
+          event.invoke,
+          { tabs: [], groups: [] },
+          context,
+          invokeObject,
+        ),
+      event.mutate,
+    ),
   }),
   {} as StatesConfig<
     BackgroundMachineContext,
@@ -120,7 +125,10 @@ const BackgroundMachineConfig: MachineConfig<
   id: 'background',
   context: {
     retries: 0,
+    installedTimestamp: new Date().getTime(),
+    version: '0.0.0-beta',
     tabs: [],
+    groups: [],
     settings: {},
   },
   initial: 'idle',

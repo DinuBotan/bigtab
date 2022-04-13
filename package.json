@@ -27,12 +27,12 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@extend-chrome/menus": "^0.0.3",
     "@extend-chrome/storage": "^1.5.0",
     "@xstate/immer": "^0.3.1",
     "@xstate/react": "^2.0.1",
     "immer": "^9.0.12",
     "lodash": "^4.17.21",
+    "nanoid": "^3.3.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "xstate": "^4.30.6"

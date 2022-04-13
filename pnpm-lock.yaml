@@ -4,7 +4,6 @@ specifiers:
   '@commitlint/cli': ^16.2.3
   '@commitlint/config-conventional': ^16.2.1
   '@commitlint/types': ^16.2.1
-  '@extend-chrome/menus': ^0.0.3
   '@extend-chrome/storage': ^1.5.0
   '@types/chrome': ^0.0.180
   '@types/firefox-webext-browser': ^94.0.1
@@ -35,6 +34,7 @@ specifiers:
   jest: ^27.5.1
   lint-staged: ^12.3.7
   lodash: ^4.17.21
+  nanoid: ^3.3.2
   prettier: ^2.6.2
   pretty-quick: ^3.1.3
   puppeteer: ^13.5.2
@@ -47,12 +47,12 @@ specifiers:
   xstate: ^4.30.6
 
 dependencies:
-  '@extend-chrome/menus': 0.0.3
   '@extend-chrome/storage': 1.5.0
   '@xstate/immer': 0.3.1_immer@9.0.12+xstate@4.30.6
   '@xstate/react': 2.0.1_20efcb6402c15d98b25e718ed3a2dc0b
   immer: 9.0.12
   lodash: 4.17.21
+  nanoid: 3.3.2
   react: 18.0.0
   react-dom: 18.0.0_react@18.0.0
   xstate: 4.30.6
@@ -681,30 +681,6 @@ packages:
       - supports-color
     dev: true
 
-  /@extend-chrome/events-rxjs/0.12.1_rxjs@6.6.7:
-    resolution: {integrity: sha512-Z3VrzaODolVpXmXw7oo5QLygv3JH1dccXYYUgJbsipTMIWWPB38fytSMj0jFVsj203K/+UDjvaXJT9raO4Y9Pg==}
-    peerDependencies:
-      rxjs: ^6.5.4
-    dependencies:
-      rxjs: 6.6.7
-    dev: false
-
-  /@extend-chrome/menus/0.0.3:
-    resolution: {integrity: sha512-aMoosLUpwBW/pk4Z1Y9JcJ0J/pfAxeEKUQipHiXePIg7ZtkuTiVVP/ZjLCjZxNEr+nsSNlAOXZONHnKLcStAfw==}
-    dependencies:
-      '@extend-chrome/events-rxjs': 0.12.1_rxjs@6.6.7
-      '@extend-chrome/messages': 1.2.2
-      rxjs: 6.6.7
-    dev: false
-
-  /@extend-chrome/messages/1.2.2:
-    resolution: {integrity: sha512-1VyUCT+1jewkm7cVBE5fMrrazxuL5QrmCOg2azmItBpiTqwmV/XxhGDQAtfsT4i24xB4gwL0s7+6PpEPec+1mw==}
-    dependencies:
-      '@types/chrome': 0.0.99
-      '@types/node': 13.13.52
-      rxjs: 7.5.4
-    dev: false
-
   /@extend-chrome/storage/1.5.0:
     resolution: {integrity: sha512-JhoBZ1xIzu0/mauNR/MadUsfNsWP1lTmWR8RlVJvWStUifzNZdAxI2i8NFCkd4RfjyTn4FcDETik3SDlAfGQRA==}
     dependencies:
@@ -1048,19 +1024,15 @@ packages:
       '@types/har-format': 1.2.5
     dev: true
 
-  /@types/chrome/0.0.99:
-    resolution: {integrity: sha512-la87+bjtZ6XstGqUdaLT5YfECSPw9Ex9iYQUOMGlBtgqI6FLGewGZtkByX5TcPBHM6XKp6RnR50Ytd+tI2m/6Q==}
-    dependencies:
-      '@types/filesystem': 0.0.29
-    dev: false
-
   /@types/filesystem/0.0.29:
     resolution: {integrity: sha512-85/1KfRedmfPGsbK8YzeaQUyV1FQAvMPMTuWFQ5EkLd2w7szhNO96bk3Rh/SKmOfd9co2rCLf0Voy4o7ECBOvw==}
     dependencies:
       '@types/filewriter': 0.0.28
+    dev: true
 
   /@types/filewriter/0.0.28:
     resolution: {integrity: sha1-wFTor02d11205jq8dviFFocU1LM=}
+    dev: true
 
   /@types/firefox-webext-browser/94.0.1:
     resolution: {integrity: sha512-I6iHRQJSTZ+gYt2IxdH2RRAMvcUyK8v5Ig7fHQR0IwUNYP7hz9+cziBVIKxLCO6XI7fiyRsNOWObfl3/4Js2Lg==}
@@ -1118,10 +1090,6 @@ packages:
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
     dev: true
-
-  /@types/node/13.13.52:
-    resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
-    dev: false
 
   /@types/node/14.14.14:
     resolution: {integrity: sha512-UHnOPWVWV1z+VV8k6L1HhG7UbGBgIdghqF3l9Ny9ApPghbjICXkUJSd/b9gOgQfjM1r+37cipdw/HJ3F6ICEnQ==}
@@ -4722,7 +4690,6 @@ packages:
     resolution: {integrity: sha512-CuHBogktKwpm5g2sRgv83jEy2ijFzBwMoYA60orPDR7ynsLijJDqgsi4RDGj3OJpy3Ieb+LYwiRmIOGyytgITA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-    dev: true
 
   /natural-compare/1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
@@ -5406,6 +5373,7 @@ packages:
     engines: {npm: '>=2.0.0'}
     dependencies:
       tslib: 1.14.1
+    dev: true
 
   /rxjs/7.5.4:
     resolution: {integrity: sha512-h5M3Hk78r6wAheJF0a5YahB1yRQKCsZ4MsGdZ5O9ETbVtjPcScGfrMmoOq7EBsCRzd4BDkvDJ7ogP8Sz5tTFiQ==}
@@ -5954,6 +5922,7 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: true
 
   /tslib/2.3.1:
     resolution: {integrity: sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==}

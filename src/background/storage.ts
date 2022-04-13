@@ -34,3 +34,7 @@ export const getStorage = async () => {
     {},
   );
 };
+
+export const clear = async () => {
+  await chrome.storage.local.clear();
+};
