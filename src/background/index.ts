@@ -3,12 +3,15 @@ import { BackgroundMachineContext } from './types';
 import { setupContextMenus } from './menus';
 import { startMachine } from './interpreter';
 import { updateStorage } from './storage';
+import { sendContext } from '../common/messages';
 
 let BACKGROUND: Awaited<ReturnType<typeof startMachine>>;
 
 const setupListeners = async () => {
-  chrome.action.onClicked.addListener(async () => {
+  chrome.action.onClicked.addListener(async (tab: chrome.tabs.Tab) => {
+    // Here
     await chrome.tabs.create({ url: 'src/pages/popup/index.html' });
+    BACKGROUND.send({ type: 'CLICK_ACTION', tab });
   });
 };
 
@@ -34,6 +37,11 @@ const onChangeBinding = async (
     await updateStorage(context);
     if (!isEqual(prevContext?.groups, context.groups)) {
       await setupContextMenus(context);
+    }
+    try {
+      await sendContext(context);
+    } catch (error) {
+      // console.log(error);
     }
     console.log(context);
   }

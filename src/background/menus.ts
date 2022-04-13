@@ -11,9 +11,7 @@ export const setupContextMenus = async (context: BackgroundMachineContext) => {
   });
 
   // Add Context Menu Events
-  const CONTEXT_MENU_EVENTS = EVENTS.filter(
-    ({ scope }) => scope === 'contextMenu',
-  );
+  const CONTEXT_MENU_EVENTS = EVENTS.filter(({ scope }) => scope === 'click');
   CONTEXT_MENU_EVENTS.map(({ name, id }) =>
     chrome.contextMenus.create({
       id,
@@ -31,16 +29,16 @@ export const setupContextMenus = async (context: BackgroundMachineContext) => {
       type: 'separator',
       parentId: 'root',
     });
-    chrome.contextMenus.create({
-      id: 'groups',
-      title: 'Groups',
-      parentId: 'root',
-    });
+    // chrome.contextMenus.create({
+    //   id: 'groups',
+    //   title: 'Groups',
+    //   parentId: 'root',
+    // });
     TAB_GROUPS.map((group) => {
       chrome.contextMenus.create({
         id: `groups-${group.id}`,
         title: group.title,
-        parentId: 'groups',
+        parentId: 'root',
       });
       return CONTEXT_MENU_EVENTS.map(({ name, id }) =>
         chrome.contextMenus.create({

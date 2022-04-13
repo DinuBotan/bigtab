@@ -1,11 +1,18 @@
-import { camelCase, kebabCase, snakeCase, toNumber, upperCase } from 'lodash';
+import {
+  camelCase,
+  kebabCase,
+  lowerCase,
+  snakeCase,
+  toNumber,
+  upperCase,
+} from 'lodash';
 import { assign, DoneInvokeEvent } from 'xstate';
 import { nanoid } from 'nanoid';
 
 import {
   BackgroundMachineContext,
-  ContextMenuOnCompleteData,
-  ContextMenuEvent,
+  EventOnCompleteData,
+  ClickEvent,
 } from './types';
 
 const append = <T>(original: T[], newItems: T[]) => [...original, ...newItems];
@@ -18,7 +25,7 @@ const unique = <T extends { id: string }>(original: T[], newItems: T[]) => [
 
 const addTabs = assign<
   BackgroundMachineContext,
-  DoneInvokeEvent<ContextMenuOnCompleteData>
+  DoneInvokeEvent<EventOnCompleteData>
 >({
   tabs: ({ tabs }, { data }) => append(tabs, data.tabs),
   groups: ({ groups }, { data }) => unique(groups, data.groups),
@@ -29,7 +36,7 @@ const getAllTabs = async () => {
   const windowTabs = await chrome.tabs.query({
     windowId: currentWindow.id,
   });
-  return windowTabs;
+  return windowTabs.filter(({ url }) => url);
 };
 
 const getGroupData = async (tab: chrome.tabs.Tab) => {
@@ -78,7 +85,7 @@ const transformTabs = async (
 
   await chrome.tabs.remove(transformedTabs.map(({ id }) => toNumber(id)));
 
-  const closedTabs = transformedTabs.map((tab) => ({ id: nanoid(), tab }));
+  const closedTabs = transformedTabs.map((tab) => ({ ...tab, id: nanoid() }));
 
   if (toGroup) {
     return {
@@ -95,7 +102,7 @@ const transformTabs = async (
 
 const sendAllTabs = async (
   context: BackgroundMachineContext,
-  event?: ContextMenuEvent,
+  event?: ClickEvent,
 ) => {
   const allTabs = await getAllTabs();
   const allTransformedTabs = await transformTabs(allTabs, event?.toGroup);
@@ -109,10 +116,10 @@ const DEFAULT_RETURN_OBJECT = {
 
 const sendTab = async (
   context: BackgroundMachineContext,
-  event?: ContextMenuEvent,
+  event?: ClickEvent,
 ) => {
   if (event && event.tab) {
-    const transformedTabs = await transformTabs([event.tab], event.toGroup);
+    const transformedTabs = await transformTabs([event.tab], event?.toGroup);
     return transformedTabs;
   }
   return DEFAULT_RETURN_OBJECT;
@@ -120,7 +127,7 @@ const sendTab = async (
 
 const sendTabsLeft = async (
   context: BackgroundMachineContext,
-  event?: ContextMenuEvent,
+  event?: ClickEvent,
 ) => {
   if (event && event.tab && event.tab.index) {
     const allTabs = await getAllTabs();
@@ -128,7 +135,7 @@ const sendTabsLeft = async (
       allTabs.filter(
         (windowTab) => windowTab.index < (event.tab as chrome.tabs.Tab).index,
       ),
-      event.toGroup,
+      event?.toGroup,
     );
     return transformedTabs;
   }
@@ -137,7 +144,7 @@ const sendTabsLeft = async (
 
 const sendTabsRight = async (
   context: BackgroundMachineContext,
-  event?: ContextMenuEvent,
+  event?: ClickEvent,
 ) => {
   if (event && event.tab && event.tab.index) {
     const allTabs = await getAllTabs();
@@ -145,7 +152,7 @@ const sendTabsRight = async (
       allTabs.filter(
         (windowTab) => windowTab.index > (event.tab as chrome.tabs.Tab).index,
       ),
-      event.toGroup,
+      event?.toGroup,
     );
     return transformedTabs;
   }
@@ -154,7 +161,7 @@ const sendTabsRight = async (
 
 const sendAllExceptThis = async (
   context: BackgroundMachineContext,
-  event?: ContextMenuEvent,
+  event?: ClickEvent,
 ) => {
   if (event && event.tab && event.tab.index) {
     const allTabs = await getAllTabs();
@@ -162,7 +169,7 @@ const sendAllExceptThis = async (
       allTabs.filter(
         (windowTab) => windowTab.index !== (event.tab as chrome.tabs.Tab).index,
       ),
-      event.toGroup,
+      event?.toGroup,
     );
     return transformedTabs;
   }
@@ -171,7 +178,7 @@ const sendAllExceptThis = async (
 
 const sendAllInCurrentTabGroup = async (
   context: BackgroundMachineContext,
-  event?: ContextMenuEvent,
+  event?: ClickEvent,
 ) => {
   if (event && event.tab && event.tab.index) {
     const allTabs = await getAllTabs();
@@ -180,7 +187,7 @@ const sendAllInCurrentTabGroup = async (
         (windowTab) =>
           windowTab.groupId === (event.tab as chrome.tabs.Tab).groupId,
       ),
-      event.toGroup,
+      event?.toGroup,
     );
     return transformedTabs;
   }
@@ -190,44 +197,44 @@ const sendAllInCurrentTabGroup = async (
 const EVENTS_CONFIG = [
   {
     name: 'Send Tab',
-    scope: 'contextMenu',
+    scope: 'click',
     invoke: sendTab,
     mutate: addTabs,
   },
   {
     name: 'Send All Tabs',
-    scope: 'contextMenu',
+    scope: 'click',
     invoke: sendAllTabs,
     mutate: addTabs,
   },
   {
     name: 'Send Tabs Left',
-    scope: 'contextMenu',
+    scope: 'click',
     invoke: sendTabsLeft,
     mutate: addTabs,
   },
   {
     name: 'Send Tabs Right',
-    scope: 'contextMenu',
+    scope: 'click',
     invoke: sendTabsRight,
     mutate: addTabs,
   },
   {
     name: 'Send All Tabs Except This',
-    scope: 'contextMenu',
+    scope: 'click',
     invoke: sendAllExceptThis,
     mutate: addTabs,
   },
   {
     name: 'Send All Tabs In Current Tab Group',
-    scope: 'contextMenu',
+    scope: 'click',
     invoke: sendAllInCurrentTabGroup,
     mutate: addTabs,
   },
 ];
 
 export const EVENTS = EVENTS_CONFIG.map(({ name, scope, invoke, mutate }) => ({
-  id: kebabCase(name),
+  id: snakeCase(lowerCase(name)),
   transition: upperCase(snakeCase(name)),
   target: camelCase(name),
   name,

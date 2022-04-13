@@ -2,16 +2,8 @@ import { interpret } from 'xstate';
 import { BackgroundMachineContext } from './types';
 import { machine } from './machine';
 import { getStorage } from './storage';
+import { DEFAULT_CONTEXT } from './context';
 // import { setupContextMenus } from './menus';
-
-const DEFAULT_CONTEXT: BackgroundMachineContext = {
-  retries: 0,
-  installedTimestamp: new Date().getTime(),
-  version: '0.0.0-beta',
-  tabs: [],
-  groups: [],
-  settings: {},
-};
 
 export const startMachine = async (
   onChangeBinding: (

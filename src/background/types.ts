@@ -42,20 +42,18 @@ export type ContextMenuEvent = {
   toGroup?: string;
 };
 
-export type ContextMenuOnCompleteData = {
+export type ClickActionEvent = {
+  type: 'CLICK_ACTION';
+  tab?: chrome.tabs.Tab;
+  info?: never;
+  toGroup?: never;
+};
+
+export type ClickEvent = ContextMenuEvent | ClickActionEvent;
+
+export type EventOnCompleteData = {
   tabs: Array<Tab>;
   groups: Array<TabGroups>;
 };
 
-export type StartSearchEvent = {
-  type: 'START_SEARCH';
-};
-
-export type StartUpdateEvent = {
-  type: 'START_UPDATE';
-};
-
-export type BackgroundMachineEvent =
-  | ContextMenuEvent
-  | StartSearchEvent
-  | StartUpdateEvent;
+export type BackgroundMachineEvent = ContextMenuEvent | ClickActionEvent;

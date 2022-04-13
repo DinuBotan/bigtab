@@ -12,13 +12,15 @@ import {
   EventObject,
 } from 'xstate';
 
+import { DEFAULT_CONTEXT } from './context';
 import { EVENTS } from './events';
 
 import {
   BackgroundMachineContext,
   BackgroundMachineEvent,
+  ClickEvent,
   ContextMenuEvent,
-  ContextMenuOnCompleteData,
+  EventOnCompleteData,
 } from './types';
 
 const invokeWrapper = async <T, V>(
@@ -70,11 +72,9 @@ const promiseServiceStates = <T, V extends EventObject>(
   onDone: 'idle',
 });
 
-const CONTEXT_MENU_EVENTS = EVENTS.filter(
-  ({ scope }) => scope === 'contextMenu',
-);
+const CLICK_EVENTS = EVENTS.filter(({ scope }) => scope === 'click');
 
-const contextMenuTransitions = CONTEXT_MENU_EVENTS.map(
+const contextMenuTransitions = CLICK_EVENTS.map(
   (event) =>
     ({
       target: event.target,
@@ -87,15 +87,21 @@ const contextMenuTransitions = CONTEXT_MENU_EVENTS.map(
     } as TransitionConfig<BackgroundMachineContext, BackgroundMachineEvent>),
 );
 
-const contextMenuStates = CONTEXT_MENU_EVENTS.reduce(
+const clickActionTransitions = CLICK_EVENTS.map(
+  (event) =>
+    ({
+      target: event.target,
+      cond: (context: BackgroundMachineContext) =>
+        context.settings?.defaultClickAction === event.id,
+    } as TransitionConfig<BackgroundMachineContext, BackgroundMachineEvent>),
+);
+
+const clickEventStates = CLICK_EVENTS.reduce(
   (stateObject, event) => ({
     ...stateObject,
-    [event.target]: promiseServiceStates<
-      ContextMenuOnCompleteData,
-      ContextMenuEvent
-    >(
+    [event.target]: promiseServiceStates<EventOnCompleteData, ClickEvent>(
       event.id,
-      (context: BackgroundMachineContext, invokeObject?: ContextMenuEvent) =>
+      (context: BackgroundMachineContext, invokeObject?: ClickEvent) =>
         invokeWrapper(
           event.invoke,
           { tabs: [], groups: [] },
@@ -123,25 +129,22 @@ const BackgroundMachineConfig: MachineConfig<
   BackgroundMachineEvent
 > = {
   id: 'background',
-  context: {
-    retries: 0,
-    installedTimestamp: new Date().getTime(),
-    version: '0.0.0-beta',
-    tabs: [],
-    groups: [],
-    settings: {},
-  },
+  context: DEFAULT_CONTEXT,
   initial: 'idle',
   states: {
-    ...contextMenuStates,
+    ...clickEventStates,
     idle: {
       on: {
         CONTEXT_MENU: 'contextMenu',
+        CLICK_ACTION: 'clickAction',
       },
       entry: assign({ retries: 0 }),
     },
     contextMenu: {
       always: contextMenuTransitions,
+    },
+    clickAction: {
+      always: clickActionTransitions,
     },
   },
 };
