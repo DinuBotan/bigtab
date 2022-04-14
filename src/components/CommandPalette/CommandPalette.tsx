@@ -4,6 +4,7 @@ import React, {
   useRef,
   useState,
   MouseEvent,
+  KeyboardEvent,
 } from 'react';
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook';
 import { search } from '../../common/search';
@@ -16,11 +17,13 @@ import styles from './CommandPalette.module.css';
 
 type CommandPaletteProps = {
   onClickedOutside: () => void | Promise<void>;
+  onEscPressed: () => void | Promise<void>;
   open: boolean;
 };
 
 export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onClickedOutside,
+  onEscPressed,
   open,
 }) => {
   // Context + State
@@ -67,6 +70,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         boundingBox,
       );
       if (!isIntersectingRef) {
+        console.log('Clicked outside');
         clickedOutside();
       }
     };
@@ -77,6 +81,27 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       document.removeEventListener('click', listener);
     };
   }, [boundingBox, onClickedOutside]);
+
+  useEffect(() => {
+    const escPressed = () => {
+      setSearchQuery('');
+      setSelectedGroup('');
+      onEscPressed();
+    };
+
+    const keyPressListener = (e: any) => {
+      console.log('Pressed esc');
+      if ((e as KeyboardEvent<HTMLImageElement>).key === 'Escape') {
+        escPressed();
+      }
+    };
+
+    window.addEventListener('keydown', keyPressListener);
+
+    return () => {
+      window.removeEventListener('keydown', keyPressListener);
+    };
+  }, [onEscPressed]);
 
   useEffect(() => {
     if (open) {
