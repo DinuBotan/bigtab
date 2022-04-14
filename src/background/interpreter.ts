@@ -1,8 +1,8 @@
 import { interpret } from 'xstate';
-import { BackgroundMachineContext } from './types';
+import { BackgroundMachineContext } from '../common/types';
 import { machine } from './machine';
-import { getStorage } from './storage';
-import { DEFAULT_CONTEXT } from './context';
+import { getStorage } from '../common/storage';
+import { DEFAULT_CONTEXT } from '../common/context';
 // import { setupContextMenus } from './menus';
 
 export const startMachine = async (

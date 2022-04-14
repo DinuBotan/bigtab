@@ -12,7 +12,7 @@ import {
   EventObject,
 } from 'xstate';
 
-import { DEFAULT_CONTEXT } from './context';
+import { DEFAULT_CONTEXT } from '../common/context';
 import { EVENTS } from './events';
 
 import {
@@ -21,7 +21,7 @@ import {
   ClickEvent,
   ContextMenuEvent,
   EventOnCompleteData,
-} from './types';
+} from '../common/types';
 
 const invokeWrapper = async <T, V>(
   func: (context: BackgroundMachineContext, arg?: V) => Promise<T>,
@@ -82,7 +82,7 @@ const contextMenuTransitions = CLICK_EVENTS.map(
         ...args: [object, object, { state: { event: ContextMenuEvent } }]
       ) => {
         const [, , meta] = args;
-        return meta.state.event.info.menuItemId.endsWith(event.id);
+        return `${meta.state.event.info.menuItemId}`.endsWith(event.id);
       },
     } as TransitionConfig<BackgroundMachineContext, BackgroundMachineEvent>),
 );
@@ -119,6 +119,7 @@ const clickEventStates = CLICK_EVENTS.reduce(
   >,
 );
 
+// TODO: Add Events & State for Updating Tab Visits
 const BackgroundMachineConfig: MachineConfig<
   BackgroundMachineContext,
   StateSchema<BackgroundMachineContext> & {

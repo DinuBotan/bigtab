@@ -1,4 +1,4 @@
-import { BackgroundMachineContext } from './types';
+import { BackgroundMachineContext } from '../common/types';
 import { EVENTS } from './events';
 
 export const setupContextMenus = async (context: BackgroundMachineContext) => {

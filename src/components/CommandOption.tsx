@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tab } from '../background/types';
+import { Tab } from '../common/types';
 import styles from '../content/styles/CommandPalette.module.css';
 
 type CommandOptionProps = {

@@ -41,7 +41,6 @@ specifiers:
   puppeteer: ^13.5.2
   react: ^18.0.0
   react-arrow-key-navigation-hook: ^1.0.2
-  react-detect-click-outside: ^1.1.2
   react-dom: ^18.0.0
   rollup-plugin-chrome-extension: ^4.0.1-18
   ts-jest: ^27.1.4
@@ -59,7 +58,6 @@ dependencies:
   nanoid: 3.3.2
   react: 18.0.0
   react-arrow-key-navigation-hook: 1.0.2_react@18.0.0
-  react-detect-click-outside: 1.1.2_react-dom@18.0.0+react@18.0.0
   react-dom: 18.0.0_react@18.0.0
   xstate: 4.30.6
 
@@ -5178,16 +5176,6 @@ packages:
       react: ^16.8.0
     dependencies:
       react: 18.0.0
-    dev: false
-
-  /react-detect-click-outside/1.1.2_react-dom@18.0.0+react@18.0.0:
-    resolution: {integrity: sha512-BYavS0DoZ7JzTgCDQiYnh3F8jWr6FONBNWLzpFICbupW3rE4IgPOzeqPn4zO0s1C10kXF8X8xiHe0C+mYSJz5g==}
-    peerDependencies:
-      react: ^16.8.0 || ^17
-      react-dom: ^16.8.0 || ^17
-    dependencies:
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
     dev: false
 
   /react-dom/18.0.0_react@18.0.0:

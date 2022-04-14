@@ -1,0 +1,1 @@
+export { TabSearchIcon } from './TabSearchIcon';

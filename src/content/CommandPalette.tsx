@@ -1,9 +1,9 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import useArrowKeyNavigationHook from 'react-arrow-key-navigation-hook';
 import { useDetectClickOutside } from 'react-detect-click-outside';
-import { DEFAULT_CONTEXT } from '../background/context';
-import { getStorage } from '../background/storage';
-import { BackgroundMachineContext, Tab } from '../background/types';
+import { DEFAULT_CONTEXT } from '../common/context';
+import { getStorage } from '../common/storage';
+import { BackgroundMachineContext, Tab } from '../common/types';
 import { contextStream } from '../common/messages';
 import { search } from '../common/search';
 import CommandOption from '../components/CommandOption';

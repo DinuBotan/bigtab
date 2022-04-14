@@ -1,0 +1,34 @@
+.groupTagContainer {
+  display: flex !important;
+  align-items: center !important;
+  font-family: 'Nunito' !important;
+  margin-right: 10px !important;
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  font-size: 12px !important;
+  padding: 3px 5px !important;
+  border-radius: 2px !important;
+  font-family: 'Nunito' !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  width: fit-content !important;
+  max-width: 100px !important;
+  height: 20px !important;
+  overflow-y: clip !important;
+  overflow-x: auto !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  text-align: center !important;
+  flex-shrink: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.groupTagContainer::-webkit-scrollbar {
+  height: 0px !important;
+}
+
+.groupTagText {
+  font-size: 12px !important;
+  font-family: 'Nunito' !important;
+  font-style: normal !important;
+}

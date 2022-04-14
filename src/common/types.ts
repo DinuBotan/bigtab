@@ -1,3 +1,4 @@
+// TODO: Add lastVisited & totalVisits
 export type Tab = {
   id: string;
   url: string;

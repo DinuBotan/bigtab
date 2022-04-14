@@ -1,8 +1,8 @@
 import { isEqual } from 'lodash';
-import { BackgroundMachineContext } from './types';
+import { BackgroundMachineContext } from '../common/types';
 import { setupContextMenus } from './menus';
 import { startMachine } from './interpreter';
-import { updateStorage } from './storage';
+import { updateStorage } from '../common/storage';
 import { sendContext } from '../common/messages';
 
 let BACKGROUND: Awaited<ReturnType<typeof startMachine>>;
@@ -10,7 +10,7 @@ let BACKGROUND: Awaited<ReturnType<typeof startMachine>>;
 const setupListeners = async () => {
   chrome.action.onClicked.addListener(async (tab: chrome.tabs.Tab) => {
     // Here
-    await chrome.tabs.create({ url: 'src/pages/popup/index.html' });
+    await chrome.tabs.create({ url: 'bigtab.html' });
     BACKGROUND.send({ type: 'CLICK_ACTION', tab });
   });
 };
@@ -66,6 +66,8 @@ const main = async () => {
 
   // Create Context Menu
   await hookContextMenus();
+
+  // TODO: Subscribe to Page Visit Events
 };
 
 main();

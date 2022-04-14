@@ -10,7 +10,7 @@ export default defineConfig({
       // add any html pages here
       input: {
         // output file at '/index.html'
-        popup: resolve(__dirname, 'src/pages/popup/index.html'),
+        popup: resolve(__dirname, 'bigtab.html'),
       },
     },
   },
