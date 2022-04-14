@@ -40,6 +40,8 @@ specifiers:
   pretty-quick: ^3.1.3
   puppeteer: ^13.5.2
   react: ^18.0.0
+  react-arrow-key-navigation-hook: ^1.0.2
+  react-detect-click-outside: ^1.1.2
   react-dom: ^18.0.0
   rollup-plugin-chrome-extension: ^4.0.1-18
   ts-jest: ^27.1.4
@@ -56,6 +58,8 @@ dependencies:
   lodash: 4.17.21
   nanoid: 3.3.2
   react: 18.0.0
+  react-arrow-key-navigation-hook: 1.0.2_react@18.0.0
+  react-detect-click-outside: 1.1.2_react-dom@18.0.0+react@18.0.0
   react-dom: 18.0.0_react@18.0.0
   xstate: 4.30.6
 
@@ -5167,6 +5171,24 @@ packages:
     resolution: {integrity: sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==}
     engines: {node: '>=8'}
     dev: true
+
+  /react-arrow-key-navigation-hook/1.0.2_react@18.0.0:
+    resolution: {integrity: sha512-ClU6OTB91/BgQdei8+LRMOhy9x7IA15tlT9I+bdwwE/pdv7l1a0w2M5HoFxzVbI0OZJdn0oDZ6FveNR7GAUxpA==}
+    peerDependencies:
+      react: ^16.8.0
+    dependencies:
+      react: 18.0.0
+    dev: false
+
+  /react-detect-click-outside/1.1.2_react-dom@18.0.0+react@18.0.0:
+    resolution: {integrity: sha512-BYavS0DoZ7JzTgCDQiYnh3F8jWr6FONBNWLzpFICbupW3rE4IgPOzeqPn4zO0s1C10kXF8X8xiHe0C+mYSJz5g==}
+    peerDependencies:
+      react: ^16.8.0 || ^17
+      react-dom: ^16.8.0 || ^17
+    dependencies:
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+    dev: false
 
   /react-dom/18.0.0_react@18.0.0:
     resolution: {integrity: sha512-XqX7uzmFo0pUceWFCt7Gff6IyIMzFUn7QMZrbrQfGxtaxXZIcGQzoNpRLE3fQLnS4XzLLPMZX2T9TRcSrasicw==}

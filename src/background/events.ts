@@ -15,11 +15,15 @@ import {
   ClickEvent,
 } from './types';
 
-const append = <T>(original: T[], newItems: T[]) => [...original, ...newItems];
-const unique = <T extends { id: string }>(original: T[], newItems: T[]) => [
+// const append = <T>(original: T[], newItems: T[]) => [...original, ...newItems];
+const unique = <T extends { [key: string]: unknown }>(
+  original: T[],
+  newItems: T[],
+  key = 'id',
+) => [
   ...original,
   ...newItems.filter(
-    ({ id }) => id && !original.find((item) => item.id === id),
+    (obj) => obj[key] && !original.find((item) => item[key] === obj[key]),
   ),
 ];
 
@@ -27,7 +31,7 @@ const addTabs = assign<
   BackgroundMachineContext,
   DoneInvokeEvent<EventOnCompleteData>
 >({
-  tabs: ({ tabs }, { data }) => append(tabs, data.tabs),
+  tabs: ({ tabs }, { data }) => unique(tabs, data.tabs),
   groups: ({ groups }, { data }) => unique(groups, data.groups),
 });
 
@@ -54,6 +58,35 @@ const getGroupData = async (tab: chrome.tabs.Tab) => {
   return { tab };
 };
 
+const getBase64FromUrl = async (url: string) => {
+  const data = await fetch(url);
+  const blob = await data.blob();
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      const base64data = reader.result;
+      resolve(base64data);
+    };
+  });
+};
+
+const getIconData = async (object: {
+  tab: chrome.tabs.Tab;
+  group?: chrome.tabGroups.TabGroup;
+}) => {
+  const iconData = await getBase64FromUrl(
+    `https://www.google.com/s2/favicons?domain=${object.tab.url}`,
+  );
+  return {
+    ...object,
+    tab: {
+      ...object.tab,
+      icon: iconData,
+    },
+  };
+};
+
 const transformTabs = async (
   tabs: Array<chrome.tabs.Tab>,
   toGroup?: string,
@@ -61,9 +94,10 @@ const transformTabs = async (
   const withGroupDataPromise = tabs
     .filter(({ pinned }) => !pinned)
     .map(getGroupData);
-
   const withGroupData = await Promise.all(withGroupDataPromise);
-  const allGroups = withGroupData
+  const withGroupAndIconDataPromise = withGroupData.map(getIconData);
+  const withGroupAndIconData = await Promise.all(withGroupAndIconDataPromise);
+  const allGroups = withGroupAndIconData
     .filter((withData) => withData.group)
     .map(({ group }) => group);
   const uniqueGroups = allGroups
@@ -74,13 +108,14 @@ const transformTabs = async (
       color: group?.color,
     }));
 
-  const transformedTabs = withGroupData.map(({ tab, group }) => ({
+  const transformedTabs = withGroupAndIconData.map(({ tab, group }) => ({
     id: `${tab.id}`,
     url: tab.url,
     title: tab.title,
     group: toGroup ?? kebabCase(group?.title) ?? '',
     firstCreated: new Date().getTime(),
     lastModified: new Date().getTime(),
+    icon: tab.icon,
   }));
 
   await chrome.tabs.remove(transformedTabs.map(({ id }) => toNumber(id)));

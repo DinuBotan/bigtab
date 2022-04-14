@@ -1,9 +1,8 @@
-import { MenuClickData } from '@extend-chrome/menus';
-
 export type Tab = {
   id: string;
   url: string;
   title: string;
+  icon: string;
   group: string;
   firstCreated: number;
   lastModified: number;
@@ -37,7 +36,7 @@ export type BackgroundMachineContext = {
 
 export type ContextMenuEvent = {
   type: 'CONTEXT_MENU';
-  info: MenuClickData;
+  info: chrome.contextMenus.OnClickData;
   tab?: chrome.tabs.Tab;
   toGroup?: string;
 };
